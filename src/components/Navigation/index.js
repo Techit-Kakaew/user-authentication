@@ -6,7 +6,7 @@ import SignOutButton from '../SignOut';
 import { Navbar, Nav } from 'react-bootstrap';
 
 const Navigation = ({ authUser }) => (
-    <div>{authUser ? <NavigationAuth /> : <NavigationNonAuth />}</div>
+    <div>{authUser ? <NavigationAuth/> : <NavigationNonAuth />}</div>
 );
 
 const NavigationAuth = () => (
@@ -16,7 +16,6 @@ const NavigationAuth = () => (
         <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ml-auto">
                 <Link className="nav-link" to={ROUTES.USER_MANAGEMENT}>User Management</Link>
-                <Link className="nav-link" to={ROUTES.ACCOUNT}>Account</Link>
                 <SignOutButton />
             </Nav>
         </Navbar.Collapse>

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { withFirebase } from '../Firebase'
-import { Button, Form, Container, Row, Col, Table } from 'react-bootstrap';
+import { Container, Row, Col, Table } from 'react-bootstrap';
 import { withAuthorization } from '../Session';
 import '../../styles/SignInStyle.css'
 import * as ROUTES from "../../constants/routes";
@@ -18,12 +17,8 @@ class UserManagementPage extends Component {
 
     componentDidMount() {
       var firestore
-      firestore = this.props.firebase.doGetAllUser()
+      firestore = this.props.firebase.doGetUser()
       this.handleGetData(firestore)
-    }
-
-    componentWillUnmount() {
-        // this.props.firebase.users().off();
     }
 
     handleGetData = async (firestore) => {

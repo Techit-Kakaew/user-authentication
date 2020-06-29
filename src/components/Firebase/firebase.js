@@ -56,8 +56,8 @@ class Firebase {
         })
     }
 
-    doUpdateUser = (first_name, last_name, phone_number, age, address, doc_id) => {
-        this.firestore.collection("users").doc(doc_id).update({
+    doUpdateUser = async (first_name, last_name, phone_number, age, address, doc_id) => {
+        await this.firestore.collection("users").doc(doc_id).update({
             first_name: first_name,
             last_name: last_name,
             phone_number: phone_number,
@@ -66,18 +66,9 @@ class Firebase {
         })
     }
 
-    doGetAllUser = () => {
-        // const users = await this.firestore.collection("users").get()
-        // console.log(users.docs.map((doc) => doc.data()))
-        // const a = await users.docs.map((doc) => doc.data())
-        // // return users.docs.map((doc) => doc.data())
+    doGetUser = () => {
         return this.firestore
     }
-
-    // API
-
-    user = uid => this.db.ref(`users/${uid}`);
-    users = () => this.db.ref('users')
 }
 
 export default Firebase;

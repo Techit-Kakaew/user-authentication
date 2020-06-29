@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
- 
 import { SignUpLink } from '../SignUp';
 import { withFirebase } from '../Firebase';
+import { withAuthorization } from '../Session';
 import * as ROUTES from '../../constants/routes';
 import { Button, Form, Container, Row, Col } from 'react-bootstrap';
 import '../../styles/SignInStyle.css'
@@ -32,10 +32,10 @@ class SignInFormBase extends Component {
           .doSignInWithEmailAndPassword(email, password)
           .then(() => {
             this.setState({ email, password });
-            this.props.history.push(ROUTES.HOME);
+            this.props.history.push(ROUTES.USER_MANAGEMENT);
           })
           .catch(error => {
-            this.setState({ error });
+            this.setState({ error: 'User not found!' });
           });
      
         event.preventDefault();
@@ -64,7 +64,7 @@ class SignInFormBase extends Component {
                                 <Form.Label>Password</Form.Label>
                                 <Form.Control name="password" type="password" placeholder="Enter password" value={this.state.password} onChange={this.handleChangeText} />
                             </Form.Group>
-
+                            <span className="text-danger">{this.state.error}</span>
                             <Form.Group className="text-center">
                                 <Button variant="primary" type="submit">
                                     Submit
@@ -79,8 +79,10 @@ class SignInFormBase extends Component {
     }
 }
 
+const condition = authUser => !!authUser;
+
 const SignInForm = compose(withRouter, withFirebase)(SignInFormBase);
 
-export default SignInPage
+export default withAuthorization(condition)(SignInPage)
 
 export {SignInForm}
