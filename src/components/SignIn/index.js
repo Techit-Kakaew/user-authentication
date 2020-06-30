@@ -26,7 +26,7 @@ class SignInFormBase extends Component {
         }
     }
 
-    handleSignIn = event => {
+    handleSignIn = e => {
         const { email, password } = this.state;
         this.setState({fetching: true, error: null})
         this.props.firebase
@@ -39,7 +39,7 @@ class SignInFormBase extends Component {
             this.setState({ error: 'User not found!', fetching: false });
           });
      
-        event.preventDefault();
+        e.preventDefault();
     }
 
     handleChangeText = (e) => {
