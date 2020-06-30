@@ -81,7 +81,7 @@ class ProfilePage extends Component {
             )
         } else {
             return (
-                <Container className="center-screen">
+                <Container className="center-screen-custom">
                     <Row>
                         <Col>
                             <h1 className="text-center">Edit Profile</h1>

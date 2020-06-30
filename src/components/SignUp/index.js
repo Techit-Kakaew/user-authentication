@@ -40,6 +40,7 @@ class SignUpFormBase extends Component {
               }
             },
         );
+        this.setState({...INITIAL_STATE})
     }
 
     emailValidation = (email) => {
@@ -125,18 +126,17 @@ class SignUpFormBase extends Component {
         
         if(validated.success) {
             this.setState({ error: validated.message, fetching: true })
-            this.props.firebase
-                .doCreateUserWithEmailAndPassword(email, password)
-                    .then(() => {
-                        this.props.firebase.doStoreUser(first_name, last_name, email, phone_number, age, address )
-                    })
-                    .then(() => {
-                        this.setState({...INITIAL_STATE})
-                        this.props.history.push(ROUTES.SIGN_IN)
-                    })
-                    .catch(error => {
-                        this.setState({ error, fetching: false })
-                    })
+            this.props.firebase.doStoreUser(first_name, last_name, email, phone_number, age, address ).then(() => {
+                this.props.firebase.doCreateUserWithEmailAndPassword(email, password).then(() => {
+                    this.setState({...INITIAL_STATE})
+                    this.props.history.push(ROUTES.SIGN_IN)
+                })
+                .catch(error => {
+                    this.setState({ fetching: false })
+                })
+            }).catch(error => {
+                this.setState({ fetching: false })
+            })
         } else {
             this.setState({ error: validated.message, fetching: false })
         }
@@ -148,78 +148,66 @@ class SignUpFormBase extends Component {
     }
 
     render() {
-        const { fetching } = this.state
-        if(fetching) {
-            return (
-                <Container className="center-screen">
+        return (
+            <div className="bg-screen">
+                <Container>
                     <Row>
-                        <Col className="text-center">
-                            <Spinner animation="border" variant="primary" />
+                        <Col>
+                            <h1 className="text-center text-white">SignUp</h1>
+                        </Col>
+                    </Row>
+                    <Row className="justify-content-center">
+                        <Col md={6} xs={12}>
+                            <Form onSubmit={this.handleRegister}>
+                                <Form.Group controlId="first_name">
+                                    <Form.Label className="text-white">First name*</Form.Label>
+                                    {this.textValidateNotificaion(this.state.first_name.textNoti)}
+                                    <Form.Control name="first_name" type="text" placeholder="Enter first name" value={this.state.first_name.value} onChange={this.handleChangeText} />
+                                </Form.Group>
+                                <Form.Group controlId="last_name">
+                                    <Form.Label className="text-white">Last name*</Form.Label>
+                                    {this.textValidateNotificaion(this.state.last_name.textNoti)}
+                                    <Form.Control name="last_name" type="text" placeholder="Enter last name" value={this.state.last_name.value} onChange={this.handleChangeText} />
+                                </Form.Group>
+                                <Form.Group controlId="email">
+                                    <Form.Label className="text-white">Email*</Form.Label>
+                                    {this.textValidateNotificaion(this.state.email.textNoti)}
+                                    <Form.Control name="email" type="email" placeholder="Enter email" value={this.state.email.value} onChange={this.handleChangeText} />
+                                </Form.Group>
+                                <Form.Group controlId="password">
+                                    <Form.Label className="text-white">Password*</Form.Label>
+                                    {this.textValidateNotificaion(this.state.password.textNoti)}
+                                    <Form.Control name="password" type="password" autoComplete="new-password" placeholder="Enter password" value={this.state.password.value} onChange={this.handleChangeText} />
+                                </Form.Group>
+                                <Form.Group controlId="passwordConfirmation">
+                                    <Form.Label className="text-white">Password Confirmation*</Form.Label>
+                                    <Form.Control name="passwordConfirmation" type="password" placeholder="Enter passwordConfirmation" value={this.state.passwordConfirmation.value} onChange={this.handleChangeText} />
+                                </Form.Group>
+                                <Form.Group controlId="age">
+                                    <Form.Label className="text-white">Age</Form.Label>
+                                    <Form.Control name="age" type="number" min="1" max="200" placeholder="Enter your age" value={this.state.age.value} onChange={this.handleChangeText} />
+                                </Form.Group>
+                                <Form.Group controlId="phone_number">
+                                    <Form.Label className="text-white">Phone number</Form.Label>
+                                    <Form.Control name="phone_number" type="text" placeholder="Enter your phone number" value={this.state.phone_number.value} onChange={this.handleChangeText} />
+                                </Form.Group>
+                                <Form.Group controlId="address">
+                                    <Form.Label className="text-white">Address</Form.Label>
+                                    <Form.Control name="address" placeholder="Enter your address" as="textarea" rows="3" value={this.state.address.value} onChange={this.handleChangeText} />
+                                </Form.Group>
+                                <span className="text-danger">{this.state.error ? this.state.error : null}</span>
+                                <Form.Group className="text-center">
+                                    <Button variant="primary" type="submit" disabled={this.state.fetching}>
+                                        {this.state.fetching ? <Spinner as="span" animation="grow" variant="danger" size="sm" role="status" aria-hidden="true" /> : ''}
+                                        {this.state.fetching ? 'Loading...' : 'Submit'}
+                                    </Button>
+                                </Form.Group>
+                            </Form>
                         </Col>
                     </Row>
                 </Container>
-            )
-        } else {
-            return (
-                <div style={{background: "#333333", width: "100%", height: "calc(100vh - 3.5rem)"}}>
-                    <Container>
-                        <Row>
-                            <Col>
-                                <h1 className="text-center text-white">SignUp</h1>
-                            </Col>
-                        </Row>
-                        <Row className="justify-content-center">
-                            <Col md={6} xs={12}>
-                                <Form onSubmit={this.handleRegister}>
-                                    <Form.Group controlId="first_name">
-                                        <Form.Label class="text-white">First name*</Form.Label>
-                                        {this.textValidateNotificaion(this.state.first_name.textNoti)}
-                                        <Form.Control name="first_name" type="text" placeholder="Enter first name" value={this.state.first_name.value} onChange={this.handleChangeText} />
-                                    </Form.Group>
-                                    <Form.Group controlId="last_name">
-                                        <Form.Label class="text-white">Last name*</Form.Label>
-                                        {this.textValidateNotificaion(this.state.last_name.textNoti)}
-                                        <Form.Control name="last_name" type="text" placeholder="Enter last name" value={this.state.last_name.value} onChange={this.handleChangeText} />
-                                    </Form.Group>
-                                    <Form.Group controlId="email">
-                                        <Form.Label class="text-white">Email*</Form.Label>
-                                        {this.textValidateNotificaion(this.state.email.textNoti)}
-                                        <Form.Control name="email" type="email" placeholder="Enter email" value={this.state.email.value} onChange={this.handleChangeText} />
-                                    </Form.Group>
-                                    <Form.Group controlId="password">
-                                        <Form.Label class="text-white">Password*</Form.Label>
-                                        {this.textValidateNotificaion(this.state.password.textNoti)}
-                                        <Form.Control name="password" type="password" autoComplete="new-password" placeholder="Enter password" value={this.state.password.value} onChange={this.handleChangeText} />
-                                    </Form.Group>
-                                    <Form.Group controlId="passwordConfirmation">
-                                        <Form.Label class="text-white">Password Confirmation*</Form.Label>
-                                        <Form.Control name="passwordConfirmation" type="password" placeholder="Enter passwordConfirmation" value={this.state.passwordConfirmation.value} onChange={this.handleChangeText} />
-                                    </Form.Group>
-                                    <Form.Group controlId="age">
-                                        <Form.Label class="text-white">Age</Form.Label>
-                                        <Form.Control name="age" type="number" min="1" max="200" placeholder="Enter your age" value={this.state.age.value} onChange={this.handleChangeText} />
-                                    </Form.Group>
-                                    <Form.Group controlId="phone_number">
-                                        <Form.Label class="text-white">Phone number</Form.Label>
-                                        <Form.Control name="phone_number" type="text" placeholder="Enter your phone number" value={this.state.phone_number.value} onChange={this.handleChangeText} />
-                                    </Form.Group>
-                                    <Form.Group controlId="address">
-                                        <Form.Label class="text-white">Address</Form.Label>
-                                        <Form.Control name="address" placeholder="Enter your address" as="textarea" rows="3" value={this.state.address.value} onChange={this.handleChangeText} />
-                                    </Form.Group>
-                                    <span className="text-danger">{this.state.error ? this.state.error : null}</span>
-                                    <Form.Group className="text-center">
-                                        <Button variant="primary" type="submit">
-                                            Submit
-                                        </Button>
-                                    </Form.Group>
-                                </Form>
-                            </Col>
-                        </Row>
-                    </Container>
-                </div>
-            )
-        }
+            </div>
+        )
     }
 }
 

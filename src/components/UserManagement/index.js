@@ -47,7 +47,7 @@ class UserManagementPage extends Component {
           )
         } else {
             return (
-              <Container>
+              <Container className="mt-5">
                   <Row>
                       <Col>
                           <h1>User Management</h1>

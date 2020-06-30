@@ -4,3 +4,31 @@
     left: 50%;
     transform: translate(-50%, -50%);
 }
+
+.bg-screen {
+    background: #333333; 
+    width: 100%;
+    height: calc(100vh - 3.5rem);
+}
+
+.center-screen-custom {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@media (max-width: 767.98px) { 
+    .bg-screen {
+        background: #333333; 
+        width: 100%;
+        height: 100%;
+    }
+
+    .center-screen-custom {
+        position: relative;
+        top: 0;
+        left: 0;
+        transform: unset;
+    }
+}

@@ -22,7 +22,7 @@ class LandingPage extends Component {
                 <Container className="center-screen">
                     <Row>
                         <Col>
-                            <h1 className="text-center text-white">Landing Page</h1>
+                            <h1 className="text-center text-white">User-Authentication</h1>
                         </Col>
                     </Row>
                     <Row className="mt-4">

@@ -45,8 +45,8 @@ class Firebase {
     doPasswordUpdate = password =>
         this.auth.currentUser.updatePassword(password);
 
-    doStoreUser = (first_name, last_name, email, phone_number, age, address) => {
-        this.firestore.collection("users").add({
+    doStoreUser = async (first_name, last_name, email, phone_number, age, address) => {
+        await this.firestore.collection("users").add({
             first_name: first_name,
             last_name: last_name,
             email: email,
