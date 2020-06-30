@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import { Button, Form, Container, Row, Col, Table } from 'react-bootstrap';
+import { Button, Form, Container, Row, Col, Spinner } from 'react-bootstrap';
 import '../../styles/SignInStyle.css'
 import { withFirebase } from '../Firebase'
 import { withAuthorization } from '../Session';
@@ -20,7 +20,6 @@ class ProfilePage extends Component {
     componentDidMount() {
         this.listener = this.props.firebase.auth.onAuthStateChanged(
             authUser => {
-            console.log(authUser)
               if (!condition(authUser)) {
                 this.props.history.push(ROUTES.SIGN_IN);
               }
@@ -74,8 +73,8 @@ class ProfilePage extends Component {
             return (
                 <Container className="center-screen">
                     <Row>
-                        <Col>
-                            <h1 className="text-center">Loading...</h1>
+                        <Col className="text-center">
+                            <Spinner animation="border" variant="primary" />
                         </Col>
                     </Row>
                 </Container>

@@ -1,11 +1,11 @@
-import React, { Component } from "react";
+import React, { Component, ReactCSSTransitionGroup } from "react";
 import { withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
 import { SignUpLink } from '../SignUp';
 import { withFirebase } from '../Firebase';
 import { withAuthorization } from '../Session';
 import * as ROUTES from '../../constants/routes';
-import { Button, Form, Container, Row, Col } from 'react-bootstrap';
+import { Button, Form, Container, Row, Col, Spinner } from 'react-bootstrap';
 import '../../styles/SignInStyle.css'
 
 
@@ -21,21 +21,22 @@ class SignInFormBase extends Component {
         this.state = {
             email: '',
             password: '',
-            error: null
+            error: null,
+            fetching: false,
         }
     }
 
     handleSignIn = event => {
         const { email, password } = this.state;
-     
+        this.setState({fetching: true, error: null})
         this.props.firebase
           .doSignInWithEmailAndPassword(email, password)
           .then(() => {
-            this.setState({ email, password });
+            this.setState({ email, password, fetching: false });
             this.props.history.push(ROUTES.USER_MANAGEMENT);
           })
           .catch(error => {
-            this.setState({ error: 'User not found!' });
+            this.setState({ error: 'User not found!', fetching: false });
           });
      
         event.preventDefault();
@@ -47,34 +48,38 @@ class SignInFormBase extends Component {
 
     render() {
         return (
-            <Container className="center-screen">
-                <Row>
-                    <Col>
-                        <h1 className="text-center">SignIn</h1>
-                    </Col>
-                </Row>
-                <Row className="justify-content-center">
-                    <Col md={6} xs={12}>
-                        <Form onSubmit={this.handleSignIn}>
-                            <Form.Group controlId="email">
-                                <Form.Label>Email</Form.Label>
-                                <Form.Control name="email" type="email" placeholder="Enter email" value={this.state.email} onChange={this.handleChangeText} />
-                            </Form.Group>
-                            <Form.Group controlId="password">
-                                <Form.Label>Password</Form.Label>
-                                <Form.Control name="password" type="password" placeholder="Enter password" value={this.state.password} onChange={this.handleChangeText} />
-                            </Form.Group>
-                            <span className="text-danger">{this.state.error}</span>
-                            <Form.Group className="text-center">
-                                <Button variant="primary" type="submit">
-                                    Submit
-                                </Button>
-                            </Form.Group>
-                        </Form>
-                    </Col>
-                </Row>
-                <SignUpLink />
-            </Container>
+            <div style={{background: "#333333", width: "100%", height: "calc(100vh - 3.5rem)"}}>
+                
+                <Container className="center-screen">
+                    <Row>
+                        <Col>
+                            <h1 className="text-center text-white">SignIn</h1>
+                        </Col>
+                    </Row>
+                    <Row className="justify-content-center">
+                        <Col md={6} xs={12}>
+                            <Form onSubmit={this.handleSignIn}>
+                                <Form.Group controlId="email">
+                                    <Form.Label className="text-white">Email</Form.Label>
+                                    <Form.Control name="email" type="email" placeholder="Enter email" value={this.state.email} onChange={this.handleChangeText} />
+                                </Form.Group>
+                                <Form.Group controlId="password">
+                                    <Form.Label className="text-white">Password</Form.Label>
+                                    <Form.Control name="password" type="password" placeholder="Enter password" value={this.state.password} onChange={this.handleChangeText} />
+                                </Form.Group>
+                                <span className="text-danger">{this.state.error}</span> 
+                                <Form.Group className="text-center">
+                                    <Button variant="primary" type="submit" disabled={this.state.fetching}>
+                                        {this.state.fetching ? <Spinner as="span" animation="grow" variant="danger" size="sm" role="status" aria-hidden="true" /> : ''}
+                                        {this.state.fetching ? 'Loading...' : 'Submit'}
+                                    </Button>
+                                </Form.Group>
+                            </Form>
+                        </Col>
+                    </Row>
+                    <SignUpLink />
+                </Container>
+            </div>
         )
     }
 }

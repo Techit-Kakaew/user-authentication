@@ -3,7 +3,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { withFirebase } from "../Firebase";
 import * as ROUTES from "../../constants/routes";
 import { compose } from 'recompose';
-import { Button, Form, Container, Row, Col } from 'react-bootstrap';
+import { Button, Form, Container, Row, Col, Spinner } from 'react-bootstrap';
 import '../../styles/SignInStyle.css'
 
 const SignUpPage = () => (
@@ -30,6 +30,16 @@ class SignUpFormBase extends Component {
         super(props)
 
         this.state = { ...INITIAL_STATE }
+    }
+
+    componentDidMount() {
+        this.listener = this.props.firebase.auth.onAuthStateChanged(
+            authUser => {
+              if (condition(authUser)) {
+                this.props.history.push(ROUTES.USER_MANAGEMENT);
+              }
+            },
+        );
     }
 
     emailValidation = (email) => {
@@ -134,7 +144,6 @@ class SignUpFormBase extends Component {
     }
 
     handleChangeText = (e) => {
-        console.log(e.target.value)
         this.setState({ [e.target.name]: {value: e.target.value, textNoti: ''} })
     }
 
@@ -144,69 +153,71 @@ class SignUpFormBase extends Component {
             return (
                 <Container className="center-screen">
                     <Row>
-                        <Col>
-                            <h1 className="text-center">Loading...</h1>
+                        <Col className="text-center">
+                            <Spinner animation="border" variant="primary" />
                         </Col>
                     </Row>
                 </Container>
             )
         } else {
             return (
-                <Container className="center-screen">
-                    <Row>
-                        <Col>
-                            <h1 className="text-center">SignUp</h1>
-                        </Col>
-                    </Row>
-                    <Row className="justify-content-center">
-                        <Col md={6} xs={12}>
-                            <Form onSubmit={this.handleRegister}>
-                                <Form.Group controlId="first_name">
-                                    <Form.Label>First name*</Form.Label>
-                                    {this.textValidateNotificaion(this.state.first_name.textNoti)}
-                                    <Form.Control name="first_name" type="text" placeholder="Enter first name" value={this.state.first_name.value} onChange={this.handleChangeText} />
-                                </Form.Group>
-                                <Form.Group controlId="last_name">
-                                    <Form.Label>Last name*</Form.Label>
-                                    {this.textValidateNotificaion(this.state.last_name.textNoti)}
-                                    <Form.Control name="last_name" type="text" placeholder="Enter last name" value={this.state.last_name.value} onChange={this.handleChangeText} />
-                                </Form.Group>
-                                <Form.Group controlId="email">
-                                    <Form.Label>Email*</Form.Label>
-                                    {this.textValidateNotificaion(this.state.email.textNoti)}
-                                    <Form.Control name="email" type="email" placeholder="Enter email" value={this.state.email.value} onChange={this.handleChangeText} />
-                                </Form.Group>
-                                <Form.Group controlId="password">
-                                    <Form.Label>Password*</Form.Label>
-                                    {this.textValidateNotificaion(this.state.password.textNoti)}
-                                    <Form.Control name="password" type="password" autoComplete="new-password" placeholder="Enter password" value={this.state.password.value} onChange={this.handleChangeText} />
-                                </Form.Group>
-                                <Form.Group controlId="passwordConfirmation">
-                                    <Form.Label>Password Confirmation*</Form.Label>
-                                    <Form.Control name="passwordConfirmation" type="password" placeholder="Enter passwordConfirmation" value={this.state.passwordConfirmation.value} onChange={this.handleChangeText} />
-                                </Form.Group>
-                                <Form.Group controlId="age">
-                                    <Form.Label>Age</Form.Label>
-                                    <Form.Control name="age" type="number" min="1" max="200" placeholder="Enter your age" value={this.state.age.value} onChange={this.handleChangeText} />
-                                </Form.Group>
-                                <Form.Group controlId="phone_number">
-                                    <Form.Label>Phone number</Form.Label>
-                                    <Form.Control name="phone_number" type="text" placeholder="Enter your phone number" value={this.state.phone_number.value} onChange={this.handleChangeText} />
-                                </Form.Group>
-                                <Form.Group controlId="address">
-                                    <Form.Label>Address</Form.Label>
-                                    <Form.Control name="address" placeholder="Enter your address" as="textarea" rows="3" value={this.state.address.value} onChange={this.handleChangeText} />
-                                </Form.Group>
-                                <span className="text-danger">{this.state.error ? this.state.error : null}</span>
-                                <Form.Group className="text-center">
-                                    <Button variant="primary" type="submit">
-                                        Submit
-                                    </Button>
-                                </Form.Group>
-                            </Form>
-                        </Col>
-                    </Row>
-                </Container>
+                <div style={{background: "#333333", width: "100%", height: "calc(100vh - 3.5rem)"}}>
+                    <Container>
+                        <Row>
+                            <Col>
+                                <h1 className="text-center text-white">SignUp</h1>
+                            </Col>
+                        </Row>
+                        <Row className="justify-content-center">
+                            <Col md={6} xs={12}>
+                                <Form onSubmit={this.handleRegister}>
+                                    <Form.Group controlId="first_name">
+                                        <Form.Label class="text-white">First name*</Form.Label>
+                                        {this.textValidateNotificaion(this.state.first_name.textNoti)}
+                                        <Form.Control name="first_name" type="text" placeholder="Enter first name" value={this.state.first_name.value} onChange={this.handleChangeText} />
+                                    </Form.Group>
+                                    <Form.Group controlId="last_name">
+                                        <Form.Label class="text-white">Last name*</Form.Label>
+                                        {this.textValidateNotificaion(this.state.last_name.textNoti)}
+                                        <Form.Control name="last_name" type="text" placeholder="Enter last name" value={this.state.last_name.value} onChange={this.handleChangeText} />
+                                    </Form.Group>
+                                    <Form.Group controlId="email">
+                                        <Form.Label class="text-white">Email*</Form.Label>
+                                        {this.textValidateNotificaion(this.state.email.textNoti)}
+                                        <Form.Control name="email" type="email" placeholder="Enter email" value={this.state.email.value} onChange={this.handleChangeText} />
+                                    </Form.Group>
+                                    <Form.Group controlId="password">
+                                        <Form.Label class="text-white">Password*</Form.Label>
+                                        {this.textValidateNotificaion(this.state.password.textNoti)}
+                                        <Form.Control name="password" type="password" autoComplete="new-password" placeholder="Enter password" value={this.state.password.value} onChange={this.handleChangeText} />
+                                    </Form.Group>
+                                    <Form.Group controlId="passwordConfirmation">
+                                        <Form.Label class="text-white">Password Confirmation*</Form.Label>
+                                        <Form.Control name="passwordConfirmation" type="password" placeholder="Enter passwordConfirmation" value={this.state.passwordConfirmation.value} onChange={this.handleChangeText} />
+                                    </Form.Group>
+                                    <Form.Group controlId="age">
+                                        <Form.Label class="text-white">Age</Form.Label>
+                                        <Form.Control name="age" type="number" min="1" max="200" placeholder="Enter your age" value={this.state.age.value} onChange={this.handleChangeText} />
+                                    </Form.Group>
+                                    <Form.Group controlId="phone_number">
+                                        <Form.Label class="text-white">Phone number</Form.Label>
+                                        <Form.Control name="phone_number" type="text" placeholder="Enter your phone number" value={this.state.phone_number.value} onChange={this.handleChangeText} />
+                                    </Form.Group>
+                                    <Form.Group controlId="address">
+                                        <Form.Label class="text-white">Address</Form.Label>
+                                        <Form.Control name="address" placeholder="Enter your address" as="textarea" rows="3" value={this.state.address.value} onChange={this.handleChangeText} />
+                                    </Form.Group>
+                                    <span className="text-danger">{this.state.error ? this.state.error : null}</span>
+                                    <Form.Group className="text-center">
+                                        <Button variant="primary" type="submit">
+                                            Submit
+                                        </Button>
+                                    </Form.Group>
+                                </Form>
+                            </Col>
+                        </Row>
+                    </Container>
+                </div>
             )
         }
     }
@@ -216,12 +227,12 @@ class SignUpLink extends Component {
     render() {
         return (
             <div>
-                <p className="text-center">Don't have an account? <Link to={ROUTES.SIGN_UP}>Sign Up</Link></p>
+                <p className="text-center text-white">Don't have an account? <Link to={ROUTES.SIGN_UP}>Sign Up</Link></p>
             </div>
         )
     }
 }
-
+const condition = authUser => !!authUser;
 const SignUpForm = compose(withRouter, withFirebase)(SignUpFormBase);
 
 export default SignUpPage

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { Container, Row, Col, Table } from 'react-bootstrap';
+import { Container, Row, Col, Table, Spinner } from 'react-bootstrap';
 import { withAuthorization } from '../Session';
 import '../../styles/SignInStyle.css'
 import * as ROUTES from "../../constants/routes";
@@ -37,13 +37,13 @@ class UserManagementPage extends Component {
         const { users, fetching } = this.state;
         if(fetching) {
           return (
-            <Container className="center-screen">
-                <Row>
-                    <Col>
-                        <h1 className="text-center">Loading...</h1>
-                    </Col>
-                </Row>
-            </Container>
+              <Container className="center-screen">
+                    <Row>
+                        <Col className="text-center">
+                            <Spinner animation="border" variant="primary" />
+                        </Col>
+                    </Row>
+              </Container>
           )
         } else {
             return (
