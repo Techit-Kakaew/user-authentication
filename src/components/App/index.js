@@ -12,7 +12,6 @@ import AdminPage from '../Admin';
 import UserManagementPage from '../UserManagement';
 import * as ROUTES from '../../constants/routes';
 import { withFirebase } from '../Firebase';
-import { withAuthentication  } from '../Session';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 class App extends Component {

@@ -2,7 +2,6 @@ import React, {Component} from "react";
 import { Button, Form, Container, Row, Col, Spinner } from 'react-bootstrap';
 import '../../styles/SignInStyle.css'
 import { withFirebase } from '../Firebase'
-import { withAuthorization } from '../Session';
 import * as ROUTES from "../../constants/routes";
 
 class ProfilePage extends Component {

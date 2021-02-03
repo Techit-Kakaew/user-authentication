@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 import React, { Component } from "react";
 import { Link, withRouter } from 'react-router-dom';
 import { withFirebase } from "../Firebase";
@@ -36,7 +37,7 @@ class SignUpFormBase extends Component {
         this.listener = this.props.firebase.auth.onAuthStateChanged(
             authUser => {
               if (condition(authUser)) {
-                this.props.history.push(ROUTES.USER_MANAGEMENT);
+                this.props.history.push(ROUTES.USER_MANAGEMENT)
               }
             },
         );
@@ -44,7 +45,7 @@ class SignUpFormBase extends Component {
     }
 
     emailValidation = (email) => {
-        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        const re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
         return re.test(email)
     }
 
