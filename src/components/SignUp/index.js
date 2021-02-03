@@ -90,7 +90,7 @@ class SignUpFormBase extends Component {
             data['password'] = true
         }
 
-        if(data['last_name'] && data['last_name'] && data['email'] && data['password']) {
+        if(data['first_name'] && data['last_name'] && data['email'] && data['password']) {
             return ({success: true, message: ''})
         } else {
             return ({success: false, message: 'Please complete this form before submit'})

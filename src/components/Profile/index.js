@@ -48,13 +48,17 @@ class ProfilePage extends Component {
         })
     }
 
-    handleUpdateProfile = (e) => {
-        e.preventDefault();
-        const { first_name, last_name, age, address, phone_number } = this.state
-        this.setState({fetching: true})
-        this.props.firebase.doUpdateUser(first_name, last_name, phone_number, age, address, this.props.match.params.uid).then(() => {
+    handleUpdateProfile = async (e) => {
+        try {
+            e.preventDefault();
+            const { first_name, last_name, age, address, phone_number } = this.state
+            this.setState({fetching: true})
+            await this.props.firebase.doUpdateUser(first_name, last_name, phone_number, age, address, this.props.match.params.uid)
+        } catch (err) {
+            alert('Something went wrong !')
+        } finally {
             this.setState({fetching: false})
-        })
+        }
     }
 
     handleChangeText = (e) => {

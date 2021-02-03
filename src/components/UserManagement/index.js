@@ -25,11 +25,11 @@ class UserManagementPage extends Component {
       this.setState({fetching: true})
       const users = await firestore.collection("users").get()
       const usersObj = users.docs.map((doc) => doc.data())
-      const userLists = Object.keys(usersObj).map(k => ({
-        ...usersObj[k],
-        uid: users.docs[k].id
+      const userList = usersObj.map((user, i) => ({
+        ...user,
+        uid: users.docs[i].id
       }))
-      this.setState({users: userLists})
+      this.setState({users: userList})
       this.setState({fetching: false})
     }
 
