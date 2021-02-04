@@ -9,11 +9,3 @@
     width: 100%;
     height: 100%;
 }
-@media (max-width: 767.98px) { 
-    .center-screen-custom {
-        position: relative;
-        top: 0;
-        left: 0;
-        transform: unset;
-    }
-}
