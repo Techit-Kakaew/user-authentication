@@ -26,20 +26,17 @@ class SignInFormBase extends Component {
         }
     }
 
-    handleSignIn = e => {
-        const { email, password } = this.state;
-        this.setState({fetching: true, error: null})
-        this.props.firebase
-          .doSignInWithEmailAndPassword(email, password)
-          .then(() => {
+    handleSignIn = async e => {
+        try {
+            e.preventDefault();
+            const { email, password } = this.state;
+            this.setState({fetching: true, error: null})
+            await this.props.firebase.doSignInWithEmailAndPassword(email, password)
             this.setState({ email, password, fetching: false });
             this.props.history.push(ROUTES.USER_MANAGEMENT);
-          })
-          .catch(error => {
+        } catch (error) {
             this.setState({ error: 'User not found!', fetching: false });
-          });
-     
-        e.preventDefault();
+        }
     }
 
     handleChangeText = (e) => {
